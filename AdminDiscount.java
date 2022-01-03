@@ -1,34 +1,38 @@
-package RideDiscount;
-import Controller.AdminControler;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package projectssw;
 
+/**
+ *
+ * @author Access
+ */
+public class AdminDiscount extends CondimentDecorator{
+      Ride ride;
 
-import RideDiscount.DiscountDecorator;
-import RideDiscount.RideDiscount;
-import Users.Client;
-///**
-// *
-// * @author Access
-// */
-public class AdminDiscount extends DiscountDecorator
-{
-
-    public AdminDiscount(RideDiscount rideDiscount) 
-    {
-        super(rideDiscount);
+    public AdminDiscount(Ride ride) {
+        this.ride = ride;
     }
-    @Override
-    public double getCost(Client client) 
-    {
-        AdminControler admin = client.clientcon.observerAdmin.admincon;
-        double discountPresentage = 10;
-        for (int i = 0; i < admin.DiscountAreas.size(); i++) 
-        {
-            if (client.ride.getDestnation().equalsIgnoreCase(admin.DiscountAreas.get(i))) 
-            {
-                return super.getCost(client) - super.getCost(client) * (double) (discountPresentage / 100);
-            }
+     @Override
+    public double CalcDiscount() {
+        if (ride.client.numberofRequestRide == 1) {
+            double discountPercentage = 0.1;
+            ride.setPriceAfterDiscount((double) ride.getPriceAfterDiscount() * discountPercentage);
+
         }
-        return super.getCost(client);
+        return ride.getPriceAfterDiscount();
 
     }
+    public void checkDiscountArea(Client client,Admin admin) {
+        for (int i = 0; i < admin.admincon.DiscountAreas.size(); i++) {
+            if (client.getRide().getDestnation().equalsIgnoreCase(admin.admincon.DiscountAreas.get(i))) {
+                CalcDiscount();
+            }
+
+        }
+
+    }
+    
 }
